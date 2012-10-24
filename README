@@ -1,0 +1,8 @@
+Simple replay mock for web service test
+
+Any xml posted to the /store endpoint will be returned (FIFO) when a post to the /respond endpoint is made.
+
+Start the service using rackup
+  rackup
+
+See Rakefile for test options
