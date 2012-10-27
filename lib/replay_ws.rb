@@ -9,8 +9,12 @@ class ReplayWS < Sinatra::Base
     mime_type :xml, "text/xml"
   end
 
+  post '/reset' do
+    @@responses = []
+  end
+
+
   post '/replay_service' do
-    
       soap_message = Nokogiri::XML(request.body.read)
       builder(:store_response)
   end
