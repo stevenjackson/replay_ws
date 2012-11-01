@@ -43,19 +43,34 @@ class TestService < MiniTest::Unit::TestCase
     </env:Envelope>}
     
     post "/store", message 
-
-    post "/respond", 
-      %Q{<?xml version="1.0" encoding="UTF-8"?>
-<env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope" xmlns:replay="http://www.leandog.com/replay">
-   <env:Body>
-      <replay:RequestResponse/>
-   </env:Body>
-</env:Envelope>}
-  
+    post "/respond", ''
 
     assert_equal message, last_response.body.strip
     assert_equal 200, last_response.status
   end
 
+
+  def test_result_should_be_xml
+    
+    message = %Q{<?xml version="1.0" encoding="UTF-8"?>
+<env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope" xmlns:replay="http://www.leandog.com/replay">
+        <env:Body>
+          <replay:Response>BARK!</replay:Response>
+        </env:Body>
+    </env:Envelope>}
+    
+    post "/store", message
+    post "/respond", ''
+
+    assert_equal 'text/xml;charset=utf-8', last_response.content_type
+  end
+
+  def test_reset
+    post "/reset", ''
+    assert_equal 200, last_response.status
+    post "/respond", ''
+    assert_equal 200, last_response.status
+    assert_equal '', last_response.body
+  end
 
 end

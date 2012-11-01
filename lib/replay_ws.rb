@@ -4,9 +4,15 @@ require 'nokogiri'
 require 'builder'
 
 class ReplayWS < Sinatra::Base
+  
   configure do
+    @@responses = []
     #SOAP expects a mime_type of text/xml
     mime_type :xml, "text/xml"
+  end
+
+  before do
+    content_type 'text/xml'
   end
 
   post '/reset' do
@@ -20,10 +26,10 @@ class ReplayWS < Sinatra::Base
   end
 
   post '/store' do
-      soap_message = Nokogiri::XML(request.body.read)
+    soap_message = Nokogiri::XML(request.body.read)
     @@responses ||= []
     @@responses << soap_message.to_s
-      200
+    200
   end
 
   post '/respond' do
