@@ -28,7 +28,7 @@ class ReplayWS < Sinatra::Base
   post '/store' do
     soap_message = Nokogiri::XML(request.body.read)
     @@responses ||= []
-    @@responses << soap_message.to_s
+    @@responses << soap_message.to_s.gsub(/\n\s*/, '')
     200
   end
 
