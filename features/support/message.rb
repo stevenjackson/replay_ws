@@ -12,3 +12,7 @@ def message(file, overrides={})
   end
   xml.to_s
 end
+
+def message_no_whitespace(file, overrides={})
+  message(file, overrides).gsub(/\n\s*/, '')
+end

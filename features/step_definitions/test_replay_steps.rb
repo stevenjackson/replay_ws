@@ -17,7 +17,7 @@ When /^I make a reservation$/ do
 end
 
 Then /^I should see a car reservation$/ do
-  @response.body.to_s.should == message(:default_car_rental)
+  @response.body.to_s.should == message_no_whitespace(:default_car_rental)
 end
 
 Given /^I want a car rental with a "(.*?)" of "(.*?)"$/ do |tag, text|
@@ -25,5 +25,5 @@ Given /^I want a car rental with a "(.*?)" of "(.*?)"$/ do |tag, text|
 end
 
 Then /^I should see a car reservation with a "(.*?)" of "(.*?)"$/ do |tag, text|
-  @response.body.to_s.should == message(:default_car_rental, { tag => text })
+  @response.body.to_s.should == message_no_whitespace(:default_car_rental, { tag => text })
 end

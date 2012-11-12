@@ -45,7 +45,7 @@ class TestService < MiniTest::Unit::TestCase
     post "/store", message 
     post "/respond", ''
 
-    assert_equal message, last_response.body.strip
+    assert_equal message.gsub(/\n\s*/, ''), last_response.body.strip
     assert_equal 200, last_response.status
   end
 
