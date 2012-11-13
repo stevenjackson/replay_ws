@@ -27,3 +27,11 @@ end
 Then /^I should see a car reservation with a "(.*?)" of "(.*?)"$/ do |tag, text|
   @response.body.to_s.should == message_no_whitespace(:default_car_rental, { tag => text })
 end
+
+Given /^I want an activity experience$/ do
+  http.post "/store", message(:default_activity_rental)
+end
+
+Then /^I should see an activity reservation$/ do
+  @response.body.to_s.should == message_no_whitespace(:default_activity_rental)
+end

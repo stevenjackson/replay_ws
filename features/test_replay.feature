@@ -16,3 +16,8 @@ Feature:  Test WS replay
     When I make a reservation
     Then I should see a car reservation with a "City" of "ATL"
 
+  Scenario:  Replay with json
+    Given I want an activity experience
+    When I make a reservation
+    Then I should see an activity reservation
+

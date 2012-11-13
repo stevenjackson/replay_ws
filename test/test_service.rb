@@ -65,6 +65,24 @@ class TestService < MiniTest::Unit::TestCase
     assert_equal 'text/xml;charset=utf-8', last_response.content_type
   end
 
+  def test_result_should_be_json
+    message = %Q~{"menu": {
+      "id": "file",
+      "value": "File",
+      "popup": {
+        "menuitem": [
+          {"value": "New", "onclick": "CreateNewDoc()"},
+          {"value": "Open", "onclick": "OpenDoc()"},
+          {"value": "Close", "onclick": "CloseDoc()"}
+        ]
+      }
+    }}~
+    post "/store", message
+    post "/respond", ''
+
+    assert_equal 'application/json;charset=utf-8', last_response.content_type
+  end
+
   def test_reset
     post "/reset", ''
     assert_equal 200, last_response.status
