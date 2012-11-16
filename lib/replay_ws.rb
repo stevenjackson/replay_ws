@@ -4,17 +4,19 @@ require 'nokogiri'
 require 'builder'
 require 'json'
 
+require_relative 'response_queues'
+
 class ReplayWS < Sinatra::Base
   
   configure do
-    @@responses = {}
+    @@responses = ResponseQueues.new
     #SOAP expects a mime_type of text/xml
     mime_type :xml, "text/xml"
     mime_type :json, "application/json"
   end
 
   post '/reset' do
-    @@responses = {}
+    @@responses.reset
     200
   end
 
@@ -45,25 +47,17 @@ class ReplayWS < Sinatra::Base
     respond params[:splat].first
   end
 
-  def store(endpoint, body)
-    endpoint = "/#{endpoint}" unless endpoint =~ /^\//
-    @@responses ||= {}
-    endpoint_responses(endpoint) << body.gsub(/\n\s*/, '')
+  def store(endpoint='/', message)
+    @@responses.store endpoint, message
   end
 
   def respond(endpoint='/')
-    endpoint = "/#{endpoint}" unless endpoint =~ /^\//
-    message = endpoint_responses(endpoint).shift
+    message = @@responses.retrieve endpoint
     content_type determine_content_type message
     puts "No message found for #{endpoint}" unless message
     message
   end
-
-  def endpoint_responses(endpoint='')
-    response_queue = @@responses[endpoint] || []
-    @@responses[endpoint] = response_queue
-    response_queue
-  end
+  
   def determine_content_type(message)
     return "application/json" if valid_json? message
     "text/xml"
