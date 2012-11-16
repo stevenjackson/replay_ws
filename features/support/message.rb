@@ -14,7 +14,7 @@ def message(file, overrides={})
 end
 
 def find_filename(file)
-  dir = "#{File.dirname(__FILE__)}/../../messages"
+  dir = "#{File.dirname(__FILE__)}/../messages"
   Dir["#{dir}/#{file}.*"].first
 end
 
